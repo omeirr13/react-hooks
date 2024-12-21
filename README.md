@@ -17,3 +17,7 @@
 - this is great way to make sure our state only changes in ways expected, and not in unexpected way.
 
 - useReducer is useful for complex state or nested components
+
+
+## Brilliant thing
+- no matter how many action we want to do with our todos, lets say we want to edit, share, more or whatever, all is in that one reducer, so we just need to pass one dispatch functions..so no need to pass separate handlers for everything.
