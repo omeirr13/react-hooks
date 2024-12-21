@@ -1,37 +1,22 @@
 import React, { useEffect, useState } from "react";
 
 export default function App() {
-  const [resourceType, setResourceType] = useState("posts");
-  const [resource, setResource] = useState([]);
-  // useEffect(() => {
-  //   console.log("resource type changeds");
-  // }, [resourceType]);
-  // console.log("redner");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  }
 
-  // useEffect(() => {
-  //   console.log("on mount");
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("okay!");
-  // }, [1, 2, 3]);
-
-  //everytime we change our resource type we are running a sideeffect
+  //on mount we are adding the event listener, so we can dynamically update the value throughout the rest of our app.
   useEffect(() => {
-    console.log("fetching", resourceType);
-    fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
-      .then(response => response.json())
-      .then(json => setResource(JSON.stringify(json)));
-  }, [resourceType]);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, []);
   return (
-    <>
-      <div>
-        <button onClick={() => setResourceType("posts")}>Posts</button>
-        <button onClick={() => setResourceType("users")}>users</button>
-        <button onClick={() => setResourceType("comments")}>Comments</button>
-      </div>
-      <h1>{resourceType}</h1>
-      <p>{resource}</p>
-    </>
+    <div>
+      {windowWidth}
+    </div>
   )
 }
