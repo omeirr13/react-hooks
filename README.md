@@ -1,34 +1,16 @@
-# useEffect
-- lets say we want to query some api endpoint, and get back all data in json format
-- inorder to do that we need to setup our code to somehow react to when we change our resource type
-- we need a sideeffect to happen when our resource changes
-- if we were to do this in class components, we would use the lifecycle methods for mounting and updating in order to create these side effects
-- but in functional components we dont have any lifecycle methods.
-- we use **useEffect** here.
+# useContext
+- function based and class based version of context is very different.
+- when we are using context we have two stuff
+1) Context Provider: want to wrap all of our code that needs access to information in the context with it.
+2) single prop value: which is whatever the value of our context is.
 
-```javascript
-useEffect(()=>{
-    console.log("render");
-})
-```
-- everything inside in above useEffect is going to be executed every time our application renders, its kinda usefull to do certain things everytime we render, but more often we gonna only want to do things when our component mounts, or when a specific resource on your page changes.
+- Everything inside our provider, all the components and their children all have access to the variable in the value prop.
 
-- useEffect takes a second parameter, an array, whatever we pass in the array is going to be values that whenever they change useEffect will run.
+## Context is for passing down props, to any of the children without having to manually pass to props
+- its like a global state for all of the children of the provider.
 
-```javascript
-useEffect(()=>{
+### In class based components:
+- to use it, we need to wrap where we need to use it with <ThemeContext.Consumer></ThemeContext.Consumer>
 
-}, []);
-```
-- this useEffect will only run on mount because we just passed an empty array.
-- this is a lot simpler than lifecycle methods, because we just say exactly what we want to happen, whenever something changes.
-
-## window width example
-- we want to display window width and see it change dynamically.
-- we need to setup our code to listen to window resize event, and modify this inner width variable
-- if we were using class components, we would set it up at onMount, add event listener and when unMount we would unmount we would remove the event listener.
-
-- but when we add an event listener if we unmount our component, we want to remove event listener, otherwise we are going to have event listeners that are hooked up and constantly being added but never removed, which will slow down our up
-- luckily, it is very easy to do cleanup when we have useEffect, every time useEffect is ran, whatever is in the return is ran first to clean up what we did last time.
-- so if we setup an event listener here, we want to make sure cleanup code removes that, or we subscribe to some api, our cleanup should unsubscribe.
-- This return will also be called any time our component unmounts
+### In function bsaed components:
+- we use useContext hook and pass in the context in it to get its value

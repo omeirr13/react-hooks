@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import FunctionContextComponent from "./FunctionContextComponent";
+import ClassContextComponents from "./ClassContextComponent";
+
+export const ThemeContext = React.createContext();
 
 export default function App() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
+  const [darkTheme, setDarkTheme] = useState(true);
+
+  function toggleTheme() {
+    setDarkTheme(prev => !prev);
   }
 
-  //on mount we are adding the event listener, so we can dynamically update the value throughout the rest of our app.
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    }
-  }, []);
   return (
-    <div>
-      {windowWidth}
-    </div>
+    <>
+    <ThemeContext.Provider value={darkTheme}>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+      <FunctionContextComponent />
+      <ClassContextComponents />
+    </ThemeContext.Provider>
+    </>
   )
 }
