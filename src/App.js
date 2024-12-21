@@ -1,17 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useReducer } from 'react'
 
-
+const ACTIONS = {
+  INCREMENT: "INCREMENT",
+  DECREMENT: "DECREMENT"
+}
+function reducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.INCREMENT:
+      return { count: state.count + 1 }
+    case ACTIONS.DECREMENT:
+      return { count: state.count - 1 }
+    default:
+      return state;
+  }
+}
 export default function App() {
-  const times = useRef(0);
-  useEffect(() => {
-    times.current = times.current + 1;
-  })
-  const [flag, setFlag] = useState(true);
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
 
+  const [count, setCount] = useState(0);
+
+  function increment() {
+    dispatch({ type: ACTIONS.INCREMENT });
+    // setCount(prev => prev + 1);
+  };
+
+  function decrement() {
+    dispatch({ type: ACTIONS.DECREMENT });
+    // setCount(prev => prev - 1);
+  };
   return (
     <>
-      <h2>i rendered {times.current} times!</h2>
-      <button onClick={() => setFlag(prev => !prev)}>Click to rerender</button>
+      <button onClick={decrement}>-</button>
+      <span>{state.count}</span>
+      <button onClick={increment}>+</button>
     </>
   )
 }
