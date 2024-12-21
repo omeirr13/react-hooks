@@ -14,3 +14,9 @@
 
 ### In function bsaed components:
 - we use useContext hook and pass in the context in it to get its value
+
+
+- inside our app we have ThemeProvider, and this is wrapping all of logic of handling state, updating state, and pushing out those different value through all of the children.
+
+- it the ThemeProvider we have two custom hooks, which give us easy access to the different values
+- This is a good repeatable pattern.
