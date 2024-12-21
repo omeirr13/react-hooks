@@ -1,51 +1,32 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import Todo from './Todo';
-
-
-export const ACTIONS = {
-  ADD_TODO: "ADD_TODO",
-  TOGGLE_TODO: "TOGGLE_TODO",
-  DELETE_TODO: "DELETE_TODO"
-}
-function reducer(todos, action) {
-  switch (action.type) {
-    case ACTIONS.ADD_TODO:
-      return [...todos, newTodo(action.payload.name)];
-    case ACTIONS.DELETE_TODO:
-      return todos.filter(todo => todo.id != action.payload.id);
-    case ACTIONS.TOGGLE_TODO:
-      return todos.map((todo) => (
-        todo.id === action.payload.id ? { ...todo, complete: !todo.complete } : todo
-      ))
-  }
-}
-
-function newTodo(name) {
-  return { id: Date.now(), name, complete: false };
-}
+import React, { useState, useTransition } from 'react'
 
 export default function App() {
-  const [todos, dispatch] = useReducer(reducer, []);
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
-  const [name, setName] = useState("");
+  const [input, setInput] = useState("");
+  const [list, setList] = useState([]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    dispatch({ type: ACTIONS.ADD_TODO, payload: { name } });
-    setName("");
+  const LIST_SIZE = 20000;
+
+  const [isPending, startTransition] = useTransition();
+
+  //emulating a list that has a lot of data, and time intensive computation, and is happening quite commonly, because we have state changes based on input that are typed
+  function handleChange(e) {
+    setInput(e.target.value);
+
+    startTransition(() => {
+      const l = [];
+      for (let i = 0; i < LIST_SIZE; i++) {
+        l.push(e.target.value);
+      }
+      setList(l);
+    })
   }
-
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={name} onChange={e => setName(e.target.value)} />
-      </form>
-
-      {todos.map(todo =>
-        <Todo key={todo.id} todo={todo} dispatch={dispatch}/>
-      )}
-    </div>
+    <>
+      <input type="text" value={input} onChange={handleChange} />
+      {isPending ? "Loading" : list.map((item, index) => {
+        return <div key={index}>{item}</div>
+      })}
+      <div>App</div>
+    </>
   )
 }
